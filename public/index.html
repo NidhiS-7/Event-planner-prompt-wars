@@ -10,19 +10,23 @@
 <body>
   <a class="skip" href="#plan-form">Skip to the planner form</a>
   <header class="top">
-    <h1>Gather</h1>
-    <p>Describe the celebration. Get a budget, a dated timeline, a vendor checklist and ideas that fit you.</p>
+    <div class="wrap">
+      <h1>Gather</h1>
+      <p>Describe the celebration. Get a budget, a dated timeline, a vendor checklist and ideas that fit you.</p>
+    </div>
   </header>
   <main>
-    <form id="plan-form" novalidate aria-describedby="form-help">
-      <p id="form-help" class="help">Fields marked * are required.</p>
+    <form id="plan-form" class="card" novalidate aria-describedby="form-help">
+      <fieldset class="types">
+        <legend>What are we celebrating? *</legend>
+        <label class="type"><input type="radio" name="type" value="wedding" checked><span><i aria-hidden="true">💍</i>Wedding</span></label>
+        <label class="type"><input type="radio" name="type" value="birthday"><span><i aria-hidden="true">🎂</i>Birthday</span></label>
+        <label class="type"><input type="radio" name="type" value="community"><span><i aria-hidden="true">🏮</i>Community</span></label>
+      </fieldset>
+      <p id="form-help" class="help">Fields marked * are required. Your inputs are remembered on this device.</p>
       <div class="grid">
-        <div class="field"><label for="type">Event type *</label>
-          <select id="type" name="type" required>
-            <option value="wedding">Wedding</option><option value="birthday">Birthday</option><option value="community">Community event</option>
-          </select></div>
         <div class="field"><label for="name">Event title</label>
-          <input id="name" name="name" maxlength="80" autocomplete="off" placeholder="Riya &amp; Aman's wedding"></div>
+          <input id="name" name="name" maxlength="80" autocomplete="off"></div>
         <div class="field"><label for="date">Event date *</label>
           <input id="date" name="date" type="date" required></div>
         <div class="field"><label for="guests">Guests *</label>
@@ -34,7 +38,7 @@
         <div class="field"><label for="city">City</label>
           <input id="city" name="city" maxlength="60" autocomplete="off" placeholder="Jabalpur"></div>
         <div class="field wide"><label for="preferences">Style, culture, must-haves</label>
-          <textarea id="preferences" name="preferences" rows="3" maxlength="300" placeholder="Outdoor evening, vegetarian menu, live folk music"></textarea></div>
+          <textarea id="preferences" name="preferences" rows="3" maxlength="300"></textarea></div>
       </div>
       <p id="errors" class="error" role="alert" hidden></p>
       <div class="actions">
@@ -42,6 +46,10 @@
         <button id="regen" type="button" class="ghost" hidden>Regenerate</button>
       </div>
     </form>
+    <div class="loader" id="loader" hidden>
+      <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span id="flavor" aria-hidden="true"></span>
+    </div>
     <p id="status" role="status" aria-live="polite" class="status"></p>
     <section id="result" aria-label="Your event plan" tabindex="-1" hidden></section>
   </main>
