@@ -4,6 +4,7 @@ const express = require('express');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const { validate, buildPrompt, shapePlan } = require('./src/planner');
+const { validateQuestion, buildAskPrompt, shapeAnswer } = require('./src/ask');
 
 const CACHE_TTL_MS = 10 * 60 * 1000;
 const CACHE_MAX = 100;
@@ -23,8 +24,17 @@ function createApp({ generate = require('./src/gemini').generate, now = () => ne
   app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1h' }));
   app.get('/healthz', (_req, res) => res.json({ ok: true }));
 
-  app.post('/api/plan', rateLimit({ windowMs: 60_000, limit: 10, standardHeaders: true, legacyHeaders: false,
-    message: { error: 'Too many requests. Please wait a minute and try again.' } }), async (req, res) => {
+  // One limiter shared by both AI endpoints, so the budget is per visitor, not per route.
+  const limiter = rateLimit({ windowMs: 60_000, limit: 15, standardHeaders: true, legacyHeaders: false,
+    message: { error: 'Too many requests. Please wait a minute and try again.' } });
+
+  const fail = (res, err) => {
+    console.error('AI request failed:', err.message);
+    const status = err.status === 503 ? 503 : 502;
+    return res.status(status).json({ error: status === 503 ? 'The AI service is not configured.' : 'Could not reach the AI right now. Please try again.' });
+  };
+
+  app.post('/api/plan', limiter, async (req, res) => {
     const { errors, value } = validate(req.body, now());
     if (errors.length) return res.status(400).json({ error: errors.join(' '), errors });
     const key = JSON.stringify(value);
@@ -35,11 +45,14 @@ function createApp({ generate = require('./src/gemini').generate, now = () => ne
       if (cache.size >= CACHE_MAX) cache.delete(cache.keys().next().value);
       cache.set(key, { at: Date.now(), plan });
       return res.json({ ...plan, cached: false });
-    } catch (err) {
-      console.error('plan generation failed:', err.message);
-      const status = err.status === 503 ? 503 : 502;
-      return res.status(status).json({ error: status === 503 ? 'The AI service is not configured.' : 'Could not generate a plan right now. Please try again.' });
-    }
+    } catch (err) { return fail(res, err); }
+  });
+
+  app.post('/api/ask', limiter, async (req, res) => {
+    const { errors, value, question } = validateQuestion(req.body, now());
+    if (errors.length) return res.status(400).json({ error: errors.join(' '), errors });
+    try { return res.json({ answer: shapeAnswer(await generate(buildAskPrompt(value, question))) }); }
+    catch (err) { return fail(res, err); }
   });
 
   app.use((err, _req, res, _next) => {
