@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gather — AI planner for weddings, birthdays and community events</title>
+  <meta name="description" content="Tell us about your event and get a budget, timeline, vendor checklist and ideas, written by Gemini.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#plan-form">Skip to the planner form</a>
+  <header class="top">
+    <h1>Gather</h1>
+    <p>Describe the celebration. Get a budget, a dated timeline, a vendor checklist and ideas that fit you.</p>
+  </header>
+  <main>
+    <form id="plan-form" novalidate aria-describedby="form-help">
+      <p id="form-help" class="help">Fields marked * are required.</p>
+      <div class="grid">
+        <div class="field"><label for="type">Event type *</label>
+          <select id="type" name="type" required>
+            <option value="wedding">Wedding</option><option value="birthday">Birthday</option><option value="community">Community event</option>
+          </select></div>
+        <div class="field"><label for="name">Event title</label>
+          <input id="name" name="name" maxlength="80" autocomplete="off" placeholder="Riya &amp; Aman's wedding"></div>
+        <div class="field"><label for="date">Event date *</label>
+          <input id="date" name="date" type="date" required></div>
+        <div class="field"><label for="guests">Guests *</label>
+          <input id="guests" name="guests" type="number" min="1" max="5000" inputmode="numeric" required placeholder="150"></div>
+        <div class="field"><label for="budget">Total budget *</label>
+          <input id="budget" name="budget" type="number" min="1" inputmode="numeric" required placeholder="500000"></div>
+        <div class="field"><label for="currency">Currency</label>
+          <select id="currency" name="currency"><option>INR</option><option>USD</option><option>EUR</option><option>GBP</option></select></div>
+        <div class="field"><label for="city">City</label>
+          <input id="city" name="city" maxlength="60" autocomplete="off" placeholder="Jabalpur"></div>
+        <div class="field wide"><label for="preferences">Style, culture, must-haves</label>
+          <textarea id="preferences" name="preferences" rows="3" maxlength="300" placeholder="Outdoor evening, vegetarian menu, live folk music"></textarea></div>
+      </div>
+      <p id="errors" class="error" role="alert" hidden></p>
+      <div class="actions">
+        <button id="submit" type="submit">Create my plan</button>
+        <button id="regen" type="button" class="ghost" hidden>Regenerate</button>
+      </div>
+    </form>
+    <p id="status" role="status" aria-live="polite" class="status"></p>
+    <section id="result" aria-label="Your event plan" tabindex="-1" hidden></section>
+  </main>
+  <script src="app.js" defer></script>
+</body>
+</html>

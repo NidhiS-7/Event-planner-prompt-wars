@@ -1,0 +1,31 @@
+:root{--ink:#1c1a33;--paper:#f6f5fb;--card:#fff;--line:#d9d6ea;--plum:#4a2c82;--gold:#f2b134;--err:#a4161a;--muted:#55526e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:1rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,h3{font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;line-height:1.2;margin:0 0 .5rem}
+.top{background:var(--plum);color:#fff;padding:2rem 1rem 1.6rem;border-bottom:6px solid var(--gold)}
+.top h1{font-size:clamp(2.4rem,7vw,4rem);letter-spacing:.01em}
+.top p{max-width:46ch;margin:0;font-size:1.1rem}
+main{max-width:60rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+.skip{position:absolute;left:-999px}.skip:focus{left:1rem;top:1rem;background:#fff;color:var(--ink);padding:.5rem 1rem;z-index:9}
+form,.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.25rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:1rem}
+.wide{grid-column:1/-1}.field label{display:block;font-weight:600;margin-bottom:.25rem}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);padding:.6rem;border:1px solid #7b7798;border-radius:6px;background:#fff}
+.help{margin:0 0 1rem;color:var(--muted)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button{font:inherit;font-weight:600;padding:.7rem 1.4rem;border-radius:6px;border:2px solid var(--plum);background:var(--plum);color:#fff;cursor:pointer}
+button.ghost{background:#fff;color:var(--plum)}button:disabled{opacity:.6;cursor:progress}
+.actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem}
+.error{color:var(--err);font-weight:600;margin:1rem 0 0}.status{min-height:1.5rem;color:var(--muted)}
+#result{display:grid;gap:1.25rem}#result[hidden]{display:none}#result:focus{outline:none}
+.panel h2{font-size:1.5rem}.panel h3{font-size:1.1rem;margin-top:1rem}
+table{width:100%;border-collapse:collapse;display:block;overflow-x:auto}
+th,td{text-align:left;padding:.5rem .6rem;border-bottom:1px solid var(--line);vertical-align:top}
+td.num,th.num{text-align:right;white-space:nowrap}
+.bar{height:.5rem;background:var(--line);border-radius:4px;min-width:5rem}.bar span{display:block;height:100%;background:var(--gold);border-radius:4px}
+.checks{list-style:none;padding:0;margin:0}.checks li{display:flex;gap:.6rem;padding:.35rem 0}
+.checks input{width:1.2rem;height:1.2rem;margin-top:.3rem;flex:none}.checks input:checked+label{text-decoration:line-through;color:var(--muted)}
+.due{font-weight:600;color:var(--plum)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (prefers-reduced-motion:no-preference){#result:not([hidden]){animation:in .3s ease-out}@keyframes in{from{opacity:0}}}
+@media print{.top,form,.actions,.status,.skip{display:none}body{background:#fff}}
